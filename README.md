@@ -31,9 +31,9 @@ The Player has two objectives that will give the best time to complete:
 ---
 
 ### Branches
-main - main branch
-alpha - Major milestone implementation in working game
-prototype - Work area, branch for feature integration
+main - main branch\n
+alpha - Major milestone implementation in working game\n
+prototype - Work area, branch for feature integration\n
 
 ### Project Phases
 Phases use the semantic versioning (Major.Minor.Patch).
