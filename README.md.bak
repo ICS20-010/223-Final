@@ -31,9 +31,9 @@ The Player has two objectives that will give the best time to complete:
 ---
 
 ### Branches
-main - main branch
-alpha - Major milestone implementation in working game
-prototype - Work area, branch for feature integration
+- main - main branch
+- alpha - Major milestone implementation in working game
+- prototype - Work area, branch for feature integration
 
 ### Project Phases
 Phases use the semantic versioning (Major.Minor.Patch).
@@ -45,13 +45,13 @@ Each bullet would be a patch.
 - Event System
 - Main menu scene transition to Game
 
-#### 1.2.8a
+#### 1.1.8a
 - Player movement (Wall Running)
 - Link rooms together
 - Implemented Timer, start, and stop
 - Save top time per run, on game exit
 
-#### 1.3.11a
+#### 1.1.11a
 - Add Player Stamin, Health
 - Draft User HUD
 - Create arrow pointing to exit

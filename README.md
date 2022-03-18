@@ -45,13 +45,13 @@ Each bullet would be a patch.
 - Event System
 - Main menu scene transition to Game
 
-#### 1.2.8a
+#### 1.1.4a
 - Player movement (Wall Running)
 - Link rooms together
 - Implemented Timer, start, and stop
 - Save top time per run, on game exit
 
-#### 1.3.11a
+#### 1.2.3a
 - Add Player Stamin, Health
 - Draft User HUD
 - Create arrow pointing to exit
