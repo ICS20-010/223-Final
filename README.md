@@ -17,7 +17,7 @@ but not the run.
 
 ### Mechanics
 There are several mechanics within the game for the player and the enemies.
-The player will have fairly high mobility with wall running and sliding, but
+The player will have fairly high mobility with wall jumping and sliding, but
 only a single jump to use. Enemies will have a variety of mechanics that
 depend on their preset behaviour, Offensive will attack from range or meele,
 Defensive will block exits or hold a key for an exit, and Obstructive will
@@ -27,33 +27,3 @@ try to bind, blind, or confuse the player.
 The Player has two objectives that will give the best time to complete:
 1. Reach the exit as fast as possible.
 2. Earn as amany points as possible.
-
----
-
-### Branches
-- main - main branch
-- alpha - Major milestone implementation in working game
-- prototype - Work area, branch for feature integration
-
-### Project Phases
-Phases use the semantic versioning (Major.Minor.Patch).
-Each bullet would be a patch.
-
-#### 1.0.4a
-- Player movement (walk, run, jump)
-- Room Template (entrance, exit, pillar)
-- Event System
-- Main menu scene transition to Game
-
-#### 1.1.4a
-- Player movement (Wall Running)
-- Link rooms together
-- Implemented Timer, start, and stop
-- Save top time per run, on game exit
-
-#### 1.2.3a
-- Add Player Stamin, Health
-- Draft User HUD
-- Create arrow pointing to exit
-
-#### To be expanded

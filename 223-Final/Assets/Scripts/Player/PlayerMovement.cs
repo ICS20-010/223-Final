@@ -22,8 +22,11 @@ public class PlayerMovement : MonoBehaviour
     private float initialJumpVelocity;  // the upward velocity at start of jump
     private int maxJumps = 2;           // # of jumps the player can do (double jump)
     private int availableJumps;         // how many jumps are available
-    private float sphereCheckSize = 0.5f;
-    private float sphereTestDistance = 0.1f;
+    // private float sphereCheckSize = 0.5f;
+    // private float sphereTestDistance = 0.3f;
+
+    private bool canWallJump = false;
+    private Vector3 wallJumpNormal;
 
     void Start()
     {
@@ -52,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
         // ensure diagonal movement doesn't exceed horiz/vert movement speed
         movement = Vector3.ClampMagnitude(movement, 1.0f);
         // rotate model
-        if(movement.magnitude > 0)
+        if (movement.magnitude > 0)
         {
             RotateModelToFaceMovement(movement);
             RotatePlayerToFaceAwayFromCamera();
@@ -72,20 +75,26 @@ public class PlayerMovement : MonoBehaviour
         if (cc.isGrounded && yVelocity < 0.0)
         {
             anim.SetBool("isGrounded", true);
+            canWallJump = false;
             // set downward velocity to something constant.
             yVelocity = yVelocityWhenGrounded;
             availableJumps = maxJumps;
         }
 
         // if jump is pressed and a jump is available, then jump!
-        if (Input.GetButtonDown("Jump") && (availableJumps > 0 || canWallJump()))
+        if (Input.GetButtonDown("Jump") && availableJumps > 0 && !canWallJump)
         {
             anim.SetBool("isGrounded", false);
             anim.SetTrigger("Jump");
             yVelocity = initialJumpVelocity;
             availableJumps--;
         }
-
+        else if (Input.GetButtonDown("Jump") && canWallJump)
+        {
+            yVelocity = initialJumpVelocity;
+            movement = -wallJumpNormal * speed;
+            canWallJump = false;
+        }
         // Make our yVelocity part of the movement vector.
         movement.y = yVelocity;
 
@@ -95,25 +104,25 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private bool canWallJump()
+    private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        RaycastHit hit;
-        if(Physics.SphereCast(footPos.position, sphereCheckSize, footPos.forward, out hit, sphereTestDistance))
+
+        if (!cc.isGrounded && hit.transform.tag == "Wall")
         {
-            Debug.Log(hit.transform.gameObject.tag);
-            if(hit.transform.gameObject.tag == "Wall")
-            {
-                //get the hit from origin and set the direction of the jump to the opposite in the x and z directions
-                Debug.Log("Can Wall Jump");
-                return true;
-            }
+            Debug.DrawRay(hit.point, hit.normal, Color.blue);
+
+            Debug.Log("WallJump");
+
+            wallJumpNormal = hit.normal;
+            canWallJump = true;
         }
-        return false;
+
     }
 
-    private void OnDrawGizmos() {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(footPos.position + footPos.forward * sphereTestDistance, sphereCheckSize);
+    private void OnDrawGizmos()
+    {
+        // Gizmos.color = Color.blue;
+        // Gizmos.DrawWireSphere(footPos.position + footPos.forward * sphereTestDistance, sphereCheckSize);
     }
 
     private void RotateModelToFaceMovement(Vector3 moveDirection)
