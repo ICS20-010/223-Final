@@ -62,9 +62,9 @@ public class PlayerMovement : MonoBehaviour
         }
         // Update animation
         anim.SetFloat("Velocity", movement.magnitude);
+
         // determine XZ movement speed
         movement *= speed;
-
         // Determine Y movement (based on gravity [g])
         // ===========================================
         // Formula for instantaneous velocity [v] of a falling object after elapsed time [t]:
@@ -89,10 +89,19 @@ public class PlayerMovement : MonoBehaviour
             yVelocity = initialJumpVelocity;
             availableJumps--;
         }
-        else if (Input.GetButtonDown("Jump") && canWallJump)
+        else if (Input.GetButtonDown("Jump") && !cc.isGrounded && canWallJump)
         {
             yVelocity = initialJumpVelocity;
-            movement = -wallJumpNormal * speed;
+            movement = wallJumpNormal;
+            // convert from local to world coordinates.
+            movement = transform.TransformDirection(movement);
+            transform.forward = movement;
+            // ensure diagonal movement doesn't exceed horiz/vert movement speed
+            movement = Vector3.ClampMagnitude(movement, 1.0f);
+            // determine XZ movement speed
+            movement *= speed;
+            // rotate model
+            model.transform.rotation = Quaternion.LookRotation(new Vector3(wallJumpNormal.x, 0f, wallJumpNormal.z));
             canWallJump = false;
         }
         // Make our yVelocity part of the movement vector.
@@ -109,10 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!cc.isGrounded && hit.transform.tag == "Wall")
         {
-            Debug.DrawRay(hit.point, hit.normal, Color.blue);
-
-            Debug.Log("WallJump");
-
+            // Debug.DrawRay(hit.point, hit.normal, Color.blue);
             wallJumpNormal = hit.normal;
             canWallJump = true;
         }
@@ -135,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
     private void RotatePlayerToFaceAwayFromCamera()
     {
         Quaternion camRotation = Quaternion.Euler(0, cam.transform.rotation.eulerAngles.y, 0);
-        // transform.rotation = camRotation;
-        transform.rotation = Quaternion.Slerp(transform.rotation, camRotation, rotateToFaceAwayFromCameraSpeed * Time.deltaTime);
+        transform.rotation = camRotation;
+        // transform.rotation = Quaternion.Slerp(transform.rotation, camRotation, rotateToFaceAwayFromCameraSpeed * Time.deltaTime);
     }
 }
