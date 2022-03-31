@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float speed = 8.0f; // speed of player's XZ movement 
     private float rotateToFaceMovementSpeed = 5.0f;
-    private float rotateToFaceAwayFromCameraSpeed = 5.0f;
+    // private float rotateToFaceAwayFromCameraSpeed = 5.0f;
     private float gravity = -9.81f;         // downward pull of gravity 
     private float yVelocity = 0.0f;                 // current Y velocity
     private float yVelocityWhenGrounded = -20.0f;   // Y velocity when grounded
@@ -49,7 +49,11 @@ public class PlayerMovement : MonoBehaviour
     {
         // Determine XZ movement
         // =====================
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 movement = Vector3.zero;
+        if(true)
+        {
+            movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        }
         // convert from local to world coordinates.
         movement = transform.TransformDirection(movement);
         // ensure diagonal movement doesn't exceed horiz/vert movement speed
@@ -76,6 +80,7 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.SetBool("isGrounded", true);
             canWallJump = false;
+            wallJumpNormal = Vector3.zero;
             // set downward velocity to something constant.
             yVelocity = yVelocityWhenGrounded;
             availableJumps = maxJumps;
@@ -92,17 +97,17 @@ public class PlayerMovement : MonoBehaviour
         else if (Input.GetButtonDown("Jump") && !cc.isGrounded && canWallJump)
         {
             yVelocity = initialJumpVelocity;
-            movement = wallJumpNormal;
-            // convert from local to world coordinates.
-            movement = transform.TransformDirection(movement);
-            transform.forward = movement;
-            // ensure diagonal movement doesn't exceed horiz/vert movement speed
-            movement = Vector3.ClampMagnitude(movement, 1.0f);
-            // determine XZ movement speed
-            movement *= speed;
             // rotate model
             model.transform.rotation = Quaternion.LookRotation(new Vector3(wallJumpNormal.x, 0f, wallJumpNormal.z));
             canWallJump = false;
+        }
+
+        if(!cc.isGrounded && wallJumpNormal != Vector3.zero)
+        {
+            movement.x *= wallJumpNormal.x;
+            movement.z *= wallJumpNormal.z;
+            
+            model.transform.rotation = Quaternion.LookRotation(new Vector3(wallJumpNormal.x, 0f, wallJumpNormal.z));
         }
         // Make our yVelocity part of the movement vector.
         movement.y = yVelocity;
@@ -118,6 +123,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!cc.isGrounded && hit.transform.tag == "Wall")
         {
+            Debug.DrawRay(hit.point, hit.normal, Color.red, 1.5f);
             // Debug.DrawRay(hit.point, hit.normal, Color.blue);
             wallJumpNormal = hit.normal;
             canWallJump = true;
@@ -127,8 +133,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Gizmos.color = Color.blue;
+        Gizmos.color = Color.blue;
         // Gizmos.DrawWireSphere(footPos.position + footPos.forward * sphereTestDistance, sphereCheckSize);
+        Gizmos.DrawLine(transform.position, transform.forward);
     }
 
     private void RotateModelToFaceMovement(Vector3 moveDirection)
