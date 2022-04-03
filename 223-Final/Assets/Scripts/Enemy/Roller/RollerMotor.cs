@@ -49,6 +49,8 @@ public class RollerMotor : EnemyBase
       case EnemyState.ATTACKING: attackingState(); break;
       default: noState(EnemyState.AIMLESS); break;
     }
+
+    Debug.DrawLine(transform.position, agent.destination, Color.red, 1.5f);
   }
 
   void aimlessState()
@@ -58,17 +60,28 @@ public class RollerMotor : EnemyBase
       state = EnemyState.SPOTTED;
       agent.SetDestination(target.position);
     }
+    agent.SetDestination(transform.position);
   }
 
   void attackingState()
   {
+    float distanceTo = Vector3.Distance(transform.position, target.position);
 
-    transform.RotateAround(target.transform.position, Vector3.up, 45f * Time.deltaTime);
-    Vector3 orbitOffset = target.transform.position + (transform.position - target.transform.position).normalized * 5f;
-    agent.SetDestination(orbitOffset);
-    if (Vector3.Distance(transform.position, target.position) >= shootingDistance)
+    if (distanceTo <= shootingDistance && distanceTo > shootingDistance - 5)
+    {
+      transform.RotateAround(target.transform.position, Vector3.up, 45f * Time.deltaTime);
+      Vector3 orbitOffset = target.transform.position + (transform.position - target.transform.position).normalized * 5f;
+      agent.SetDestination(orbitOffset);
+    }
+    if (distanceTo >= shootingDistance)
     {
       state = EnemyState.SPOTTED;
+    }
+    if (distanceTo <= shootingDistance - 5f)
+    {
+      transform.rotation = Quaternion.LookRotation(transform.position - target.position);
+      Vector3 moveTo = transform.position + transform.forward * 5f;
+      agent.SetDestination(moveTo);
     }
   }
 
