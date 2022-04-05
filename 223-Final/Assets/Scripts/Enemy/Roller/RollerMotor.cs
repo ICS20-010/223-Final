@@ -5,14 +5,13 @@ using UnityEngine.AI;
 
 public class RollerMotor : EnemyBase
 {
-
-  [SerializeField] private Transform target;
-
+  [SerializeField] private GameObject projectile;
+  [SerializeField] private Transform shotSpawnpt;
+  private Transform target;
   private NavMeshAgent agent;
-
   // Movement Speed
-  private float shootSpeed = 1.5f;
-
+  private float shootSpeed = 10f;
+  private float timeSinceLastShot = 0f;
   private float spottingDistance = 30f;
   private float shootingDistance = 15f;
 
@@ -27,6 +26,7 @@ public class RollerMotor : EnemyBase
   // Start is called before the first frame update
   void Start()
   {
+    target = GameObject.FindGameObjectWithTag("PlayerTarget").transform;
     agent = gameObject.GetComponent<NavMeshAgent>();
   }
 
@@ -41,7 +41,6 @@ public class RollerMotor : EnemyBase
   // Update is called once per frame
   void Update()
   {
-    Debug.Log(state);
     switch (state)
     {
       case EnemyState.AIMLESS: aimlessState(); break;
@@ -50,7 +49,7 @@ public class RollerMotor : EnemyBase
       default: noState(EnemyState.AIMLESS); break;
     }
 
-    Debug.DrawLine(transform.position, agent.destination, Color.red, 1.5f);
+    // Debug.DrawLine(transform.position, agent.destination, Color.red, 1.5f);
   }
 
   void aimlessState()
@@ -66,6 +65,17 @@ public class RollerMotor : EnemyBase
   void attackingState()
   {
     float distanceTo = Vector3.Distance(transform.position, target.position);
+    if(shootSpeed <= timeSinceLastShot)
+    {
+      GameObject shot = GameObject.Instantiate(projectile, shotSpawnpt.position, Quaternion.identity);
+      projectileShot ps = shot.GetComponent<projectileShot>();
+      ps.Shoot();
+      timeSinceLastShot = 0;
+    }
+    else 
+    {
+      timeSinceLastShot += Time.deltaTime;
+    }
 
     if (distanceTo <= shootingDistance && distanceTo > shootingDistance - 5)
     {
@@ -77,7 +87,7 @@ public class RollerMotor : EnemyBase
     {
       state = EnemyState.SPOTTED;
     }
-    if (distanceTo <= shootingDistance - 5f)
+    if (distanceTo <= shootingDistance - 3f)
     {
       transform.rotation = Quaternion.LookRotation(transform.position - target.position);
       Vector3 moveTo = transform.position + transform.forward * 5f;

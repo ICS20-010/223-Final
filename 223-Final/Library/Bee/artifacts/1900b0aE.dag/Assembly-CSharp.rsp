@@ -342,6 +342,7 @@
 "Assets/Scripts/Enemy/EnemyBase.cs"
 "Assets/Scripts/Enemy/EnemyState.cs"
 "Assets/Scripts/Enemy/lookToPlayer.cs"
+"Assets/Scripts/Enemy/projectileShot.cs"
 "Assets/Scripts/Enemy/Roller/RollerMotor.cs"
 "Assets/Scripts/Player/PlayerMovement.cs"
 "Assets/Scripts/System/GameEvents.cs"
