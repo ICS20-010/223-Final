@@ -131,12 +131,12 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        // Gizmos.DrawWireSphere(footPos.position + footPos.forward * sphereTestDistance, sphereCheckSize);
-        Gizmos.DrawLine(transform.position, transform.forward);
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.blue;
+    //     // Gizmos.DrawWireSphere(footPos.position + footPos.forward * sphereTestDistance, sphereCheckSize);
+    //     Gizmos.DrawLine(transform.position, transform.forward);
+    // }
 
     private void RotateModelToFaceMovement(Vector3 moveDirection)
     {

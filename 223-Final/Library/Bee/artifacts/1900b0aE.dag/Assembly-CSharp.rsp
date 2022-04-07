@@ -345,6 +345,8 @@
 "Assets/Scripts/Enemy/projectileShot.cs"
 "Assets/Scripts/Enemy/Roller/RollerMotor.cs"
 "Assets/Scripts/Player/PlayerMovement.cs"
+"Assets/Scripts/System/Enviroment/exitTrigger.cs"
+"Assets/Scripts/System/Enviroment/spinObject.cs"
 "Assets/Scripts/System/GameEvents.cs"
 "Assets/Scripts/System/Messenger.cs"
 -langversion:8.0

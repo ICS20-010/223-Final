@@ -8,5 +8,5 @@ public static class GameEvents {
     public const string GAME_RESUMED = "GAME_RESUMED";
     public const string GAME_PAUSED = "GAME_PAUSED";
     public const string PLAYER_DEAD = "PLAYER_DEAD";
-
+    public const string EXIT_OPENED = "EXIT_OPENED";
 }

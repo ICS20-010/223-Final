@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class projectileShot : MonoBehaviour {
   [SerializeField] private Rigidbody rb;
+  [SerializeField] private float TTL = 5.0f;
   private float shotSpeed = 25f;
 
   public void Shoot()
@@ -14,7 +15,7 @@ public class projectileShot : MonoBehaviour {
   private IEnumerator waitDestroy()
   {
     Debug.Log("Destroyed Projectile");
-    yield return new WaitForSeconds(1f);
+    yield return new WaitForSeconds(TTL);
     Destroy(this.gameObject);
   }
 }
