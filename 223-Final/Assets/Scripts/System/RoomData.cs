@@ -163,6 +163,10 @@ public class RoomData : MonoBehaviour
           if (enemy.TryGetComponent<BoperMotor>(out enemyBoper))
           {
             enemyList.Add((EnemyBase)enemyBoper);
+            if (enemyBoper.isStatic)
+            {
+              enemyBoper.transform.parent = enemySpawn;
+            }
           }
           enemyCount -= 1;
         }

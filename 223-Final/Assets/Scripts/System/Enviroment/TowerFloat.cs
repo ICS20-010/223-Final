@@ -19,6 +19,8 @@ public class TowerFloat : MonoBehaviour
     rb.isKinematic = true;
     rb.useGravity = false;
     rb.interpolation = RigidbodyInterpolation.Interpolate;
+    float magnitude = Vector3.Distance(waypoints[waypointIndex].position, waypoints[waypointIndex - 1].position);
+    moveSpeed = magnitude / moveSpeed;
   }
 
   void OnTriggerEnter(Collider other)
