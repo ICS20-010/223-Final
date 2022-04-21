@@ -7,13 +7,12 @@ public class RollerMotor : EnemyBase
 {
   [SerializeField] private GameObject projectile;
   [SerializeField] private Transform shotSpawnpt;
-  private Transform target;
   private NavMeshAgent agent;
   // Movement Speed
-  private float shootSpeed = 10f;
+  private float shootSpeed = 5f;
   private float timeSinceLastShot = 0f;
-  private float spottingDistance = 30f;
-  private float shootingDistance = 15f;
+  private float spottingDistance = 40f;
+  private float shootingDistance = 25f;
 
   /**
   *   Roller_Enemy movement script...
@@ -26,30 +25,29 @@ public class RollerMotor : EnemyBase
   // Start is called before the first frame update
   void Start()
   {
-    target = GameObject.FindGameObjectWithTag("PlayerTarget").transform;
     agent = gameObject.GetComponent<NavMeshAgent>();
   }
 
-  private void OnDrawGizmos()
-  {
-    Gizmos.color = Color.red;
-    Gizmos.DrawWireSphere(transform.position, shootingDistance);
-    Gizmos.color = Color.yellow;
-    Gizmos.DrawWireSphere(transform.position, spottingDistance);
-  }
+  // private void OnDrawGizmos()
+  // {
+  //   Gizmos.color = Color.red;
+  //   Gizmos.DrawWireSphere(transform.position, shootingDistance);
+  //   Gizmos.color = Color.yellow;
+  //   Gizmos.DrawWireSphere(transform.position, spottingDistance);
+  // }
 
   // Update is called once per frame
   void Update()
   {
-    switch (state)
-    {
-      case EnemyState.AIMLESS: aimlessState(); break;
-      case EnemyState.SPOTTED: chasingState(); break;
-      case EnemyState.ATTACKING: attackingState(); break;
-      default: noState(EnemyState.AIMLESS); break;
+    if(target != null) {
+      switch (state)
+      {
+        case EnemyState.AIMLESS: aimlessState(); break;
+        case EnemyState.SPOTTED: chasingState(); break;
+        case EnemyState.ATTACKING: attackingState(); break;
+        default: noState(EnemyState.AIMLESS); break;
+      }
     }
-
-    // Debug.DrawLine(transform.position, agent.destination, Color.red, 1.5f);
   }
 
   void aimlessState()
@@ -68,6 +66,7 @@ public class RollerMotor : EnemyBase
     if(shootSpeed <= timeSinceLastShot)
     {
       GameObject shot = GameObject.Instantiate(projectile, shotSpawnpt.position, Quaternion.identity);
+      shot.transform.LookAt(target.transform);
       projectileShot ps = shot.GetComponent<projectileShot>();
       ps.Shoot();
       timeSinceLastShot = 0;

@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 9134472914734727435}
   - component: {fileID: 9134472914734727431}
   - component: {fileID: -2866233222918675404}
+  - component: {fileID: 2921791284864521592}
   m_Layer: 0
   m_Name: Projectile
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,8 +97,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.0380211, y: 1.0460293, z: 1.039422}
+  m_Center: {x: -0.0027873516, y: -0.009261489, z: -0.0027866364}
 --- !u!54 &9134472914734727431
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -127,3 +128,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 9134472914734727431}
+  TTL: 5
+  damage: 15
+--- !u!65 &2921791284864521592
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9134472914734727434}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

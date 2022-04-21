@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class lookToPlayer : MonoBehaviour
 {
-    private Transform playerTransfrom;
-    private Transform parentTransform;
-    // Start is called before the first frame update
-    void Start()
-    {
-        parentTransform = gameObject.GetComponentInParent<Transform>();
-        playerTransfrom = GameObject.FindGameObjectWithTag("PlayerTarget").transform;
-    }
+  private Transform playerTransfrom;
+  private Transform parentTransform;
+  // Start is called before the first frame update
+  void Start()
+  {
+    parentTransform = gameObject.GetComponentInParent<Transform>();
+  }
 
-    // Update is called once per frame
-    void Update()
+  public void setTarget(Transform target)
+  {
+    playerTransfrom = target;
+  }
+
+  // Update is called once per frame
+  void Update()
+  {
+    if (playerTransfrom != null)
     {
-        
-        transform.position = parentTransform.position;
-        transform.rotation = Quaternion.identity;
-        transform.LookAt(playerTransfrom);
+      transform.position = parentTransform.position;
+      transform.rotation = Quaternion.identity;
+      transform.LookAt(playerTransfrom);
     }
+  }
 }
