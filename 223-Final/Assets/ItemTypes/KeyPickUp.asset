@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9dcf6191622e3746a0a427c35294bda, type: 3}
+  m_Name: KeyPickUp
+  m_EditorClassIdentifier: 
+  item_name: Key
+  item_tag: Pickup
+  item_model: {fileID: 919132149155446097, guid: 1d5a952f32d7ce245b321794c033b27b, type: 3}
+  scale: {x: 25, y: 25, z: 25}
+  spawnOffset: {x: 0, y: 0.5, z: 0}
+  rotates: 1
+  pickup: 1
+  interactable: 0
+  x: 0
+  y: 1
+  z: 0

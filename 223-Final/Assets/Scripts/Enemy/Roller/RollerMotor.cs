@@ -1,51 +1,109 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class RollerMotor : MonoBehaviour
+public class RollerMotor : EnemyBase
 {
-    [SerializeField] private Rigidbody rigidBody;
+  [SerializeField] private GameObject projectile;
+  [SerializeField] private Transform shotSpawnpt;
+  private NavMeshAgent agent;
+  // Movement Speed
+  private float shootSpeed = 5f;
+  private float timeSinceLastShot = 0f;
+  private float spottingDistance = 40f;
+  private float shootingDistance = 25f;
 
-    
-    // Movement Speed
-    private float speed = 3.5f;
-    // how often it shoots
-    private float shootSpeed = 1.5f;
+  /**
+  *   Roller_Enemy movement script...
+  *   The roller enemy will maintain a set distance from the player and
+  *   move parallel with the player and shoot, They are destroyed on one hit.
+  *   They move slower when moving away from the player then when the moving parallel
+  *   Allowing the player to catchup faster.
+  **/
 
-    private float spottingDistance = 30f;
-    private float shootingDistance = 15f;
+  // Start is called before the first frame update
+  void Start()
+  {
+    agent = gameObject.GetComponent<NavMeshAgent>();
+  }
 
-    private EnemyState rollerState = EnemyState.NONE;
+  // private void OnDrawGizmos()
+  // {
+  //   Gizmos.color = Color.red;
+  //   Gizmos.DrawWireSphere(transform.position, shootingDistance);
+  //   Gizmos.color = Color.yellow;
+  //   Gizmos.DrawWireSphere(transform.position, spottingDistance);
+  // }
 
-    /**
-    *   Roller_Enemy movement script...
-    *   The roller enemy will maintain a set distance from the player and
-    *   move parallel with the player and shoot, They are destroyed on one hit.
-    *   They move slower when moving away from the player then when the moving parallel
-    *   Allowing the player to catchup faster.
-    **/
+  // Update is called once per frame
+  void Update()
+  {
+    if(target != null) {
+      switch (state)
+      {
+        case EnemyState.AIMLESS: aimlessState(); break;
+        case EnemyState.SPOTTED: chasingState(); break;
+        case EnemyState.ATTACKING: attackingState(); break;
+        default: noState(EnemyState.AIMLESS); break;
+      }
+    }
+  }
 
-    // Start is called before the first frame update
-    void Start()
+  void aimlessState()
+  {
+    if (Vector3.Distance(transform.position, target.position) <= spottingDistance)
     {
-        rigidBody = gameObject.GetComponent<Rigidbody>();
+      state = EnemyState.SPOTTED;
+      agent.SetDestination(target.position);
     }
+    agent.SetDestination(transform.position);
+  }
 
-    private void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, shootingDistance);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, spottingDistance);
-    }
-
-    // Update is called once per frame
-    void Update()
+  void attackingState()
+  {
+    float distanceTo = Vector3.Distance(transform.position, target.position);
+    if(shootSpeed <= timeSinceLastShot)
     {
-        
+      GameObject shot = GameObject.Instantiate(projectile, shotSpawnpt.position, Quaternion.identity);
+      shot.transform.LookAt(target.transform);
+      projectileShot ps = shot.GetComponent<projectileShot>();
+      ps.Shoot();
+      timeSinceLastShot = 0;
     }
-
-    void TestDistanceState() 
+    else 
     {
-
+      timeSinceLastShot += Time.deltaTime;
     }
+
+    if (distanceTo <= shootingDistance && distanceTo > shootingDistance - 5)
+    {
+      transform.RotateAround(target.transform.position, Vector3.up, 45f * Time.deltaTime);
+      Vector3 orbitOffset = target.transform.position + (transform.position - target.transform.position).normalized * 5f;
+      agent.SetDestination(orbitOffset);
+    }
+    if (distanceTo >= shootingDistance)
+    {
+      state = EnemyState.SPOTTED;
+    }
+    if (distanceTo <= shootingDistance - 3f)
+    {
+      transform.rotation = Quaternion.LookRotation(transform.position - target.position);
+      Vector3 moveTo = transform.position + transform.forward * 5f;
+      agent.SetDestination(moveTo);
+    }
+  }
+
+  void chasingState()
+  {
+    agent.SetDestination(target.position);
+    if (Vector3.Distance(transform.position, target.position) <= shootingDistance)
+    {
+      state = EnemyState.ATTACKING;
+    }
+    else if (Vector3.Distance(transform.position, target.position) >= spottingDistance)
+    {
+      state = EnemyState.AIMLESS;
+    }
+  }
 }

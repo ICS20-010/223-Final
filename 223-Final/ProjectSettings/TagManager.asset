@@ -6,6 +6,19 @@ TagManager:
   tags:
   - Ground
   - Wall
+  - PlayerTarget
+  - Exit
+  - Key
+  - RoomSpawn
+  - Room
+  - EnemySpawn
+  - Tower
+  - ItemSpawn
+  - Projectile
+  - Pickup
+  - Enemy
+  - Platform
+  - playerModel
   layers:
   - Default
   - TransparentFX
