@@ -6,7 +6,7 @@ public class projectileShot : MonoBehaviour
   [SerializeField] private Rigidbody rb;
   [SerializeField] private float TTL = 5.0f;
   public int damage = 15;
-  private float shotSpeed = 25f;
+  [SerializeField] private float shotSpeed = 25f;
 
   public void Shoot()
   {

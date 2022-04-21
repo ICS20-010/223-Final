@@ -7,7 +7,7 @@ public class BoperMotor : EnemyBase
 {
   [SerializeField] private GameObject projectile;
   [SerializeField] private Transform shotSpawnpt;
-  [SerializeField] private bool isStatic = false;
+  public bool isStatic = false;
   private NavMeshAgent agent;
   // Movement Speed
   private float shootSpeed = 5f;
